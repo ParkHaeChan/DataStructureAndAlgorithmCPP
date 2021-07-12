@@ -13,6 +13,11 @@ int solution(vector<vector<int>> board)
     // 2차원 배열 순회용
     int row = board.size();
     int col = board[0].size();
+	
+	/* 2차원 벡터로 초기화 하고 싶으면 이렇게 한다.
+	vector<int> colvect(col+1, 0);
+    vector<vector<int>> dp(row+1, colvect);
+	*/
     
     // 일반적인 순서로 순회해도 dp table을 구성할 수 있음
     // dp정의: dp[정사각형 Y축][정사각형 X축] = 현재 위치를 오른쪽 최하단으로 봤을 때
