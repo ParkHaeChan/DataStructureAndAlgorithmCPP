@@ -7,6 +7,7 @@
 using namespace std;
 
 /*
+문제: https://programmers.co.kr/learn/courses/30/lessons/42895
 이 문제는 정말 많은 고민을 했다.
 일단 DP로 풀 수 있다는 힌트를 가지고 시작했기에
 어떻게든 최적 부분 구조와 반복되는 부분 문제가 나타나도록 상태를 정의하려 했으나
