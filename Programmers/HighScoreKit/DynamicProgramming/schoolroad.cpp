@@ -134,7 +134,7 @@ int solution(int m, int n, vector<vector<int>> puddles) {
     // 지도에 웅덩이 표시
     for(auto pos : puddles)
     {
-        //좌표(X,Y) => 행렬[Y][X]로 접근
+        // !!!!이부분 주의!!!!! 좌표(X,Y) => 행렬[Y][X]로 접근
         RoadMap[pos[1]][pos[0]] = INF;  
     }
     
