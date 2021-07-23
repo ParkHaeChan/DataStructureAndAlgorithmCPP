@@ -70,6 +70,10 @@ int solution(vector<int> sticker)
     int N = sticker.size();
     vector<int> DP(N, 0);
 
+    // 특수 상태 처리: N == 1 일 떄
+    if(N == 1)
+        return sticker[0];  // 하나 뜯고 끝(N이 2 이상이면 아래 코드로)
+
     //초기 조건: 0번 스티커부터 뜯을 경우
     DP[0] = sticker[0];
     DP[1] = sticker[0]; //0을 선택 했으므로 1까지 고려했을 때 최대는 0만 선택한 경우
@@ -80,7 +84,9 @@ int solution(vector<int> sticker)
         //DP[i] = max( DP[i-1] + 0 , DP[i-2] + sticker[i] )
         DP[i] = max( DP[i-1], DP[i-2] + sticker[i]);
     }
-    ret = max(DP[N-1], DP[N-2]);    // max( DP[N-1], DP[N-2] + (sticker[N-1] = 0 마지막 못 듣으므로) )
+    ret = max(ret, DP[N-2]);    // 일관성을 위해 아래쪽(:107줄) 같이 변경(대신 앞에 특수 상태 처리 코드 추가)
+    // ret = max(DP[N-1], DP[N-2]);
+    // 이전에 통과됐던 것은 컴파일러가 배열의 음수 접근을 묵인해서 가능했기 때문, 실제로는 위험한 코드임
 
     //DP테이블 초기화
     DP = vector<int>(N, 0); // reserve(N)은 초기화에 못 씀
