@@ -80,7 +80,7 @@ class Graph
 template<typename U>
 std::ostream& operator<< (std::ostream& os, const Graph<U>& G)
 {
-    for(unsigned i = 1; i < G.vertices(); ++i)
+    for(unsigned i = 1; i <= G.vertices(); ++i)
     {
         os << i << ":\t";
         auto edges = G.edges(i);
