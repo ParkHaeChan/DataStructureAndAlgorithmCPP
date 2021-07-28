@@ -22,13 +22,12 @@ unsigned find_parent(unsigned id)
     {
         node = dset[node.parent];
     }
-
     return node.parent;
 }
 
 bool union_node(Node& a, Node& b)
 {
-    // 부모 같으면 cycle 발생
+    // 부모 같으면 합칠 때 cycle 발생
     if(find_parent(a.id) == find_parent(b.id))
         return false;
 
@@ -40,6 +39,7 @@ bool union_node(Node& a, Node& b)
     {
         dset[find_parent(a.id)].parent = find_parent(b.id);
     }
+    // 둘 다 rank 증가시켜놔야 아직 방문 안한 노드와 union할 때 그 노드가 자식으로 간다
     a.rank++;
     b.rank++;
 
