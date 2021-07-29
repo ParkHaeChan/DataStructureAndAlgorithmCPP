@@ -36,15 +36,15 @@ int solution(vector<vector<int>> routes) {
     {
         if(!e.start && !visited[e.id])
         {
-            answer++;
+            answer++;   // 카메라 설치
             while(!IDQ.empty())
             {
                 int id = IDQ.front(); IDQ.pop();
-                visited[id] = true;
+                visited[id] = true; // 카메라에 걸리는 구간들 표시
             }
         }
         else
-        {
+        {   //시작점이면 이 구간을 큐에 저장
             IDQ.push(e.id);
         }
     }
