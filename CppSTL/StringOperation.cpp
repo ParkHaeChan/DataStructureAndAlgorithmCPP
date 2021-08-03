@@ -30,7 +30,7 @@ void print_wstrvector(vector<wstring>& vect)
 }
 
 // 공백 문자 제거하기
-void remove_spaces(string& str)
+string remove_spaces(string str)
 {
     str.erase(  //erase ( first: 삭제할 시작 위치, last: 삭제할 범위의 끝 = str.end() )
         // remove_if : 범위 내에서 람다 조건함수 작성하면 iterator 반환
@@ -39,6 +39,7 @@ void remove_spaces(string& str)
         return isspace(x);
         }),
     str.end());
+    return str;
 }
 
 // 문자열 Parsing: stringstream과 getline을 이용 (파싱 구분문자가 1개인 경우)
@@ -172,8 +173,8 @@ int main()
     string str = "string with some \t spaces \n and line...";
     cout << str << endl;
 
-    remove_spaces(str);
-    cout << str << endl;
+    string space_removed_str = remove_spaces(str);
+    cout << space_removed_str << endl;
     
     string parseStr = "this,string,will?parsed!with,the#comma";
     vector<string> parsed = parse_string(parseStr);
