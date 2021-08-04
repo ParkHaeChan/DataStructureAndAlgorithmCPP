@@ -16,11 +16,11 @@ bool InRange(int x, int y)
 int solution(string dirs) {
     int answer = 0;
 
-    vector<pair<int,int>> dir = {{-1, 0}, {1,0}, {0,1}, {0,-1}};   // L, R, U, D
-
     // save edges
     using point = pair<int,int>;
     using line = pair<point, point>;
+
+    vector<point> dir = {{-1, 0}, {1,0}, {0,1}, {0,-1}};   // L, R, U, D
 
     map<line, bool> usedEdges;
     point cur = {0,0};
@@ -46,15 +46,17 @@ int solution(string dirs) {
                 dy = dir[3].second;
                 break;
         }
-        point temp = {cur.first+dx, cur.second+dy};
-        if(!InRange(temp.first, temp.second))
+        point next_pos = {cur.first+dx, cur.second+dy};
+        if(!InRange(next_pos.first, next_pos.second))
         {
             continue;
         }
-        usedEdges[{cur, temp}] = true;
-        usedEdges[{temp, cur}] = true;
-        cur = temp;
+        // 추가로 cur == next_pos 인 경우 걸러주는 작업이 필요할 수 있다. (이 경우 edge가 아닌 vertex를 저장한 것이 된다)
+        usedEdges[{cur, next_pos}] = true;
+        usedEdges[{next_pos, cur}] = true;
+        cur = next_pos;
     }
+    // 양방향이 저장되어있으므로 반으로 줄여서 출력
     answer = usedEdges.size()/2;
     
     return answer;
