@@ -72,12 +72,15 @@ string recur(string& p, int start, int end)
     }
     else
     { // 앞뒤 문자를 제거하고, 나머지 문자의 괄호 방향을 뒤집고 양끝에 ( ) 추가
-        u[start] = '(';
+        u[start] = '('; // 제거했다 치고 바로 덮어쓴다
         u[mid-1] = ')';
-        int center = (start+(mid-1))/2;
-        for(int i=start+1; i<=center; ++i)
+        //  나머지는 방향을 뒤집는다
+        int front = start+1, back = mid-2;
+        while(front < back)
         {
-            swap(u[i], u[mid-1-i]);
+            swap(u[front], u[back]);
+            front++;
+            back--;
         }
         return u + recur(v, 0, v.size());
     }
