@@ -35,7 +35,7 @@ struct job
 
 // 방법2: comp 구조체를 만든다.
 struct comp
-{   // 이때는 operator()()를 사용한다
+{   // 이때는 operator()(Type a, Type b)를 사용한다
     bool operator()(job a, job b)
     {   // 작은게 먼저 나오도록 하려면 >를 써준다.
         return a.require > b.require;
@@ -84,7 +84,7 @@ int solution(vector<vector<int>> jobs) {
                 if(jobPQ.empty())
                 {
                     jobPQ.push(temp);
-                    cnt++;  // 중간에 break하면 안늘어 나므로 주의
+                    cnt++;  // 중간에 break하면 cnt가 그대로인 상태라 다음 반복시 같은 값을 또 보게 되므로 주의
                 }
                 break;
             }  

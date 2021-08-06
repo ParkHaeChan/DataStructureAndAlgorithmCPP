@@ -52,7 +52,7 @@ using namespace std;
 int solution(vector<int> citations) {
     int answer = 0;
     
-    // 역순으로 정렬
+    // 내림차순 정렬
     sort(citations.begin(), citations.end(), [](auto a, auto b){
         return a>b;
     });
