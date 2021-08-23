@@ -4,13 +4,13 @@
 -용도: 단일시작점에서 다른 모든 노드까지의 최단 경로를 저장
 
 -입력: 시작 위치 노드
--출력: 모든 위치까지의 최소 거리가 저장된 배열
-(문제가 단일 목적지까지의 거리라면 목적지에 도달하면 바로 종료하도록 구현할 수도 있다)
+-출력: 모든 위치까지의 최소 거리가 저장된 배열(dist) 또는 목적지까지의 거리값(dist[Target])
+(문제가 단일 목적지까지의 거리라면 목적지에 도달하면 바로 종료하도록 구현)
 
 -한계: 음수 가중치가 있는 경우 사용 불가능
 
 -응용:
-최단 거리를 출력하되, 최단 거리가 여러 방식으로 가능한 경우, 최대 보너스 포인트를 챙기도록 구현
+최단 거리를 출력하되, 여러 경로가 최단 거리로 가능한 경우, 최대 보너스 포인트를 챙기도록 구현
 
 -구현:
 1) 시작 노드 설정
@@ -87,14 +87,14 @@ vector<int> dijkstra(int start)
 
         // 4) 해당 노드를 거쳐 다른 노드로 가는 비용을 계산하여 최단 거리 테이블을 갱신
         for(gnode next: GRAPH[cur.id])
-        {   // 최소 거리 갱신되는 경우
+        {   // 최단 거리 갱신되는 경우
             if(dist[next.id] > curdist + next.weight)
             {   
                 bonus[next.id] = cur.bp + next.bp;
                 dist[next.id] = curdist + next.weight;
                 PQ.push({next.id, -dist[next.id], bonus[next.id]});
             }
-            // 최소 거리가 같은 다른 경로의 경우
+            // 최단 거리가 같은 다른 경로의 경우
             if(dist[next.id] == curdist + next.weight)
             {   // bonus가 커질때만 갱신한다
                 if(bonus[next.id] < cur.bp + next.bp)
@@ -121,6 +121,7 @@ vector<int> solution(int n, int k, vector<vector<int>> paths) {
         int t = e[1];
         int weight = e[2];
         int bp = e[3];
+        // 양방향
         GRAPH[s].push_back({t, weight, bp});
         GRAPH[t].push_back({s, weight, bp});
     }
