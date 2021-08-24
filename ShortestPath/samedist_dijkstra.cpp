@@ -158,7 +158,7 @@ int main()
     int start = 1;
     int target = 4;
 
-    // {a, b, c, d}: a-b가 (양방향)연결되어 있고 가중치(거리)는 c이고, 보너스 점수 d(추가 데이터)
+    // {a, b, c}: a-b가 (양방향)연결되어 있고 가중치(거리)가 c임
     vector<vector<int>> paths = {{1,5,1},{1,2,4},{1,3,3},{2,5,2},{2,4,2},{3,4,2}};
     solution(n, start, target, paths);
 
