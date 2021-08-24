@@ -47,14 +47,8 @@ struct PQ_NODE
     int bp;
  
     inline bool operator< (const PQ_NODE& left) const
-    {// 거리가 짧은 순으로 먼저 시도하고
-        // 거리가 같은 경우는 보너스 포인트 높은 순으로
-        // if(this->weight == left.weight)
-        // {
-        //     return this->bp > left.bp;  // bp 내림차순(maxHeap)
-        // }
-        // else : 안써도 상관없었음... 어차피 거리 갱신되면 보너스 점수도 새로운 경로로 같이 갱신되야함
-        return this->weight < left.weight;  // weight 오름차순(minHeap)
+    {
+        return this->weight > left.weight;  // return front > back; (minHeap)
     }
 };
 
@@ -72,7 +66,7 @@ vector<int> dijkstra(int start)
     dist[start] = 0;         // 시작 위치는 초기 거리 0 이다   
 
     priority_queue<PQ_NODE> PQ;
-    PQ.push({start, -dist[start], bonus[start]});   // minHeap으로 작동시키기 위해 weight에 -를 붙이는 것 주의
+    PQ.push({start, dist[start], bonus[start]});   // minHeap으로 작동시키기 위해 weight에 -를 붙이는 것 주의
 
     while(!PQ.empty())
     {   // 3) 방문하지 않은 노드 중에서 최단거리 가장 짧은 노드 선택
@@ -83,7 +77,7 @@ vector<int> dijkstra(int start)
             break;
         visited[cur.id] = true;
 
-        int curdist = -cur.weight;
+        int curdist = cur.weight;
 
         // 4) 해당 노드를 거쳐 다른 노드로 가는 비용을 계산하여 최단 거리 테이블을 갱신
         for(gnode next: GRAPH[cur.id])
@@ -92,7 +86,7 @@ vector<int> dijkstra(int start)
             {   
                 bonus[next.id] = cur.bp + next.bp;
                 dist[next.id] = curdist + next.weight;
-                PQ.push({next.id, -dist[next.id], bonus[next.id]});
+                PQ.push({next.id, dist[next.id], bonus[next.id]});
             }
             // 최단 거리가 같은 다른 경로의 경우
             if(dist[next.id] == curdist + next.weight)
@@ -101,7 +95,7 @@ vector<int> dijkstra(int start)
                 {
                     bonus[next.id] = cur.bp + next.bp;
                     // 갱신된 보너스에 누적하도록 PQ에 삽입한다
-                    PQ.push({next.id, -dist[next.id], bonus[next.id]});
+                    PQ.push({next.id, dist[next.id], bonus[next.id]});
                 }
             }
         }
