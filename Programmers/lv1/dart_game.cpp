@@ -48,12 +48,11 @@ struct dart
 int solution(string dartResult) {
     int answer = 0;
     
-    // 3회로 던지므로 각 회별로 파싱한다
+    // 파싱
     vector<dart> darts;
     for(int readoffset = 0; readoffset < dartResult.size(); )
     {
-        // parse input: 기본으로 2개 값을 읽되 다음이 *,#이면 다음까지 읽는다
-        // 10인 경우도 처리가능해야 한다 : 10인 경우만 따로 처리하면 쉽지만 숫자를 따로 파싱하도록 구현해본다.
+        // 10인 경우도 처리가능해야 한다: 두자리 수 까지 커버 칠 수 있도록 구현
         string numcheck = dartResult.substr(readoffset, 2);
         int score = stoi(numcheck); // 숫자 아닌 부분은 버림
         if(score / 10 > 0)
@@ -62,6 +61,7 @@ int solution(string dartResult) {
             readoffset++;
         char bonus = dartResult[readoffset++];
         char option = 'X';
+        // 범위 주의하여 배열 접근할 것
         if(readoffset < dartResult.size() && dartResult[readoffset] == '*' || dartResult[readoffset] == '#')    // 시도 1)
             option = dartResult[readoffset++];
         darts.push_back({score, bonus, option});
@@ -71,7 +71,7 @@ int solution(string dartResult) {
     for(int i=0; i<darts.size(); ++i)
     {
         int calculated;
-        auto& e = darts[i]; // 참조로 받던가 아니면 아래서 darts[i].score에 직접 접근하든가
+        auto& e = darts[i]; // 참조로 받던가 아니면 다시 darts[i].score에 직접 접근하든가
         switch (e.bonus)
         {
         case 'S':
@@ -95,7 +95,7 @@ int solution(string dartResult) {
             calculated *= -1;
             break;
         }
-        e.score = calculated;
+        e.score = calculated;   // e는 참조형이라 darts[i]가 변경됨
     }
     for(auto e: darts)
         answer += e.score;
