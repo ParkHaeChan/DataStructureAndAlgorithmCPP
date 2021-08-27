@@ -1,4 +1,8 @@
-﻿#include <iostream>
+﻿/*
+같은 것이 있는 순열 (같은 것 끼리는 순서를 따지지 않는다)
+*/
+
+#include <iostream>
 #include <string>
 #include <vector>
 #include <algorithm>
@@ -32,19 +36,13 @@ void overlaping_permutation(std::string& inputstr, int current_index)
 	{
 		//서로 같은 원소이면 바꿔도 겹치므로 넘어간다
 		if (inputstr[current_index] == inputstr[i])
-		{
 			continue;
-		}
 
 		// 현재 문자가 순서상 다음 문자보다 작으면 현재 문자 위치와 다음 문자 위치 교환
 		if (inputstr[current_index] < inputstr[i])
-		{
-			char temp = inputstr[current_index];
-			inputstr[current_index] = inputstr[i];
-			inputstr[i] = temp;
-		}
+			std::swap(inputstr[current_index] ,inputstr[i]);
 		
-		//bxxx, cxxx, dxxx로 시작하는 모든 case를 처리
+		//b(xxx), c(xxx), d(xxx)로 시작하는 모든 case를 처리
 		overlaping_permutation(inputstr, current_index + 1);
 		// 현재 문자 위치 제외하고 다시 정렬(xxx부분)하여 다음 재귀 진입
 		std::sort(inputstr.begin() + current_index + 1, inputstr.end());
@@ -59,7 +57,7 @@ void print_permutations()
 
 int main()
 {
-	std::string inputstring = "cabc";
+	std::string inputstring = "cababc";
 
 	overlaping_permutation(inputstring, 0);
 

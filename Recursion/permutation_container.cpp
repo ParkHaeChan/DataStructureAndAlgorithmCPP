@@ -42,7 +42,7 @@ set<int> maked;
 bool debug = false;
 
 // actual은 디버깅 용도
-void recur(vector<set<int>>& dices, int depth, int target, string makedstr, vector<bool> selected, vector<int>& actual)
+void recur(vector<set<int>>& dices, int depth, int target, string makedstr, vector<bool> used, vector<int>& actual)
 {
     if(depth == target)
     {   // 그냥 0이거나, 맨 왼쪽이 0인 경우는 불가능
@@ -62,16 +62,16 @@ void recur(vector<set<int>>& dices, int depth, int target, string makedstr, vect
     }
 
     // 순열이기 때문에 이전에 값이 뒤에 또 나올 수 있어야 한다
-    // 단 중복은 불가능하므로 selected로 체크한다
+    // 단 중복은 불가능하므로 used로 체크한다
     for(int i=0; i<dices.size(); ++i)
     {   // 이미 선택된 container는 제외
-        if(selected[i])
+        if(used[i])
             continue;
-        selected[i] = true;
+        used[i] = true;
         actual.push_back(i);
         for(auto e: dices[i])
-            recur(dices, depth+1, target, makedstr+to_string(e), selected, actual);
-        selected[i] = false;
+            recur(dices, depth+1, target, makedstr+to_string(e), used, actual);
+        used[i] = false;
         actual.pop_back();
     }
 }
@@ -92,11 +92,11 @@ int solution(vector<vector<int>> dice) {
     }
 
     string temp = "";
-    vector<bool> selected(N, false);
+    vector<bool> used(N, false);
     vector<int> actual; // 디버깅용
     for(int i=1; true; ++i)
     {
-        recur(setvect, 0, i, temp, selected, actual);
+        recur(setvect, 0, i, temp, used, actual);
         string start = "1";
         string end = "10";
         int cnt = i-1;
@@ -118,8 +118,8 @@ int solution(vector<vector<int>> dice) {
 
 int main()
 {
-    vector<vector<int>> dice = {{1, 6, 2, 5, 3, 4}, {9, 9, 1, 0, 7, 8}};
-    //vector<vector<int>> dice = {{0, 1, 5, 3, 9, 2}, {2, 1, 0, 4, 8, 7}, {6, 3, 4, 7, 6, 5}};
+    //vector<vector<int>> dice = {{1, 6, 2, 5, 3, 4}, {9, 9, 1, 0, 7, 8}};
+    vector<vector<int>> dice = {{0, 1, 5, 3, 9, 2}, {2, 1, 0, 4, 8, 7}, {6, 3, 4, 7, 6, 5}};
 
     cout << solution(dice) << endl;
 
