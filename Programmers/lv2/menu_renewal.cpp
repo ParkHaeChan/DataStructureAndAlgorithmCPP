@@ -66,13 +66,13 @@ orders와 course 매개변수는 return 하는 배열의 길이가 1 이상이 �
 using namespace std;
 
 map<string, int> menu_personMap; // 메뉴 조합 주문 횟수 저장
-string ORDER;
+string G_ORDER; //  전역변수라 접두사 G_추가
 
 void recur(string& str, int depth)    // 2가지 이상의 모든 메뉴 조합을 만든다
 {
-    if(depth == ORDER.size())
+    if(depth == G_ORDER.size())
     {
-        if(str.size() < 2)
+        if(str.size() < 2)  // 2글자 미만이면 제외
             return;
 
         menu_personMap[str]++;
@@ -81,7 +81,7 @@ void recur(string& str, int depth)    // 2가지 이상의 모든 메뉴 조합�
 
     // 각자리 글자 선택 안하는 경우, 하는 경우
     recur(str, depth+1);
-    str += ORDER[depth];
+    str += G_ORDER[depth];
     recur(str, depth+1);
     str = str.substr(0, str.size()-1);
 }
@@ -91,8 +91,8 @@ vector<string> solution(vector<string> orders, vector<int> course) {
 
     for(string str : orders)
     {
-        ORDER = str;
-        sort(ORDER.begin(), ORDER.end());
+        G_ORDER = str;
+        sort(G_ORDER.begin(), G_ORDER.end());
         string s;
         recur(s, 0);
     }
@@ -124,7 +124,7 @@ vector<string> solution(vector<string> orders, vector<int> course) {
                 break;
         }
         */
-        // 반복자를 활용한다
+        // 일반적인 for문을 써도 되지만 여기서는 반복자를 써봤다
         auto it = menus.begin()+1;
         for( ; it != menus.end(); it++)
         {   // 포인터 처럼 작동하므로 (*)를 붙여준다

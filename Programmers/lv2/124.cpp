@@ -32,7 +32,8 @@ n은 500,000,000이하의 자연수 입니다.
 9는 3진법으로 100이고, 124로는 24에 해당한다(대치로 작동X)
 
 시도2)
-3으로 나누되 나머지가 0이 되는 경우는 몫-1, 나머지:3 이 되도록 조치한다.
+3진법을 만드는 것 처럼 3으로 나누되 나머지가 0이 되는 경우는 몫-1, 나머지:3 이 되도록 조치한다.
+즉, 3진법의 0,1,2가 (124나라에선) 4,1,2로 대치되면 된다.
 나머지만 스택에 넣었다가 꺼내면서 124로 치환한다.
 통과
 */
@@ -49,18 +50,18 @@ string solution(int n) {
     string n124 = "0124";
     stack<int> numStack;
 
-    int div = n;
-    int ram;
-    while(div > 0)
+    int quotient = n;
+    int remainder;
+    while(quotient > 0)
     {
-        ram = div%3;
-        div /= 3;
-        if(ram == 0)
+        remainder = quotient%3;
+        quotient /= 3;
+        if(remainder == 0)
         {
-            div--;
-            ram = 3;
+            quotient--;
+            remainder = 3;
         }
-        numStack.push(ram);
+        numStack.push(remainder);
     }
     while (!numStack.empty())
     {

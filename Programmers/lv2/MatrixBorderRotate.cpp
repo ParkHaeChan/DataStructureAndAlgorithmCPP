@@ -38,17 +38,17 @@ int rotate(int r1, int c1, int r2, int c2, vector<vector<int>>& board)
     int min_val = INF;
 
     vector<int> temp;
-    // 테두리 값 접근 (코너 부분 값 안 겹치도록 주의: 반복문에서 <로 쓴다)
-    // 윗변: r1, c1에서 시작-> r1, c2까지
+    // 테두리 값 접근 (코너 부분 값 안 겹치도록 주의: 반복문 조건에 <로 쓴다)
+    // 윗변: r1, c1에서 시작-> r1, c2(포함X)까지
     for(int c=c1; c<c2; ++c)
         temp.push_back(board[r1][c]);
-    // 오른쪽변: r1, c2에서 시작 -> r2, c2까지
+    // 오른쪽변: r1, c2에서 시작 -> r2(포함X), c2까지
     for(int r=r1; r<r2; ++r)
         temp.push_back(board[r][c2]);
-    // 아랫변: r2, c2에서 시작 -> r2, c1까지 (반대)
+    // 아랫변: r2, c2에서 시작 -> r2, c1(포함X)까지 (반대)
     for(int c=c2; c>c1; --c)
         temp.push_back(board[r2][c]);
-    // 왼쪽변: r2, c1에서 시작 -> r1, c1까지 (반대)
+    // 왼쪽변: r2, c1에서 시작 -> r1(포함X), c1까지 (반대)
     for(int r=r2; r>r1; --r)
         temp.push_back(board[r][c1]);
 
@@ -57,7 +57,7 @@ int rotate(int r1, int c1, int r2, int c2, vector<vector<int>>& board)
     temp.pop_back();
     temp.insert(temp.begin(), last);
 
-    // 이동: temp에서 이미 옮겼으므로 순서대로 적용
+    // 이동: temp에서 이미 옮겼으므로 순서대로 적용(반복문구조 동일하게 적용하여 temp값을 원위치로)
     int idx = 0;
     // 윗변: r1, c1에서 시작-> r1, c2까지
     for(int c=c1; c<c2; ++c)
@@ -84,7 +84,7 @@ int rotate(int r1, int c1, int r2, int c2, vector<vector<int>>& board)
 vector<int> solution(int rows, int columns, vector<vector<int>> queries) {
     vector<int> answer;
 
-    // 원본 배열(비교용)
+    // 원본 배열 생성
     vector<vector<int>> board(rows, vector<int>(columns, 0));
     for(int r=0; r<rows; ++r)
     {

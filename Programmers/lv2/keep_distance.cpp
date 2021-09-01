@@ -28,6 +28,13 @@ return 값 형식
 1차원 정수 배열에 5개의 원소를 담아서 return 합니다.
 places에 담겨 있는 5개 대기실의 순서대로, 거리두기 준수 여부를 차례대로 배열에 담습니다.
 각 대기실 별로 모든 응시자가 거리두기를 지키고 있으면 1을, 한 명이라도 지키지 않고 있으면 0을 담습니다.
+
+풀이)
+본인은 BFS로 풀었는데, 다른 풀이 보니까 그냥 반복문으로 푼경우도 꽤 된다.
+원리는 P위치 사방을 사정거리로 두고 그 영역 내에 들어오거나 영역이 겹치면 거리두기가 실행되지 않았다고 판정하는 방식으로 하면된다.
+P위치를 먼저 찾고, 거기서 맨해튼거리 1인 구역에 모두 사정거리로 둔다.
+이때 다른 P가 영역 내에 있거나, 다른 P의 영역과 겹치는 경우 모두 거리두기 실패 판정처리하면 된다.
+BFS로 푼 경우는 이 코드를 참고하면 된다.
 */
 #include <string>
 #include <vector>
@@ -73,11 +80,11 @@ int check_distance(const vector<string>& room)
             auto cur = bfsQ.front(); bfsQ.pop();
 
             if(cur.second <= 2 && cur.first != start)
-            {   // 2거리 내에 사람 있는지 검사
+            {   // 2거리 내에 사람 있는지 검사(시작 위치는 제외한다)
                 if(room[cur.first.first][cur.first.second] == 'P')
                     return 0;
             }
-            if(cur.second > 2)    // 거리 초과하면 더이상 탐색X
+            if(cur.second+1 > 2)    // 다음시도가 거리 초과하면 탐색X
                 continue;
 
             for(auto dir: dirs)

@@ -34,7 +34,7 @@ https://programmers.co.kr/learn/courses/30/lessons/17677
 
 #include <iostream>
 #include <string>
-#include <algorithm>
+#include <algorithm>    // std::transform
 #include <vector>
 #include <map>
 #include <cmath>
@@ -71,47 +71,45 @@ int solution(string str1, string str2) {
     map<string, int> cluster2 = cluster(str2);
 
     // 자카드 유사도 계산
-    map<string, int> union_set;
-    for(auto e: cluster1)
-        union_set.insert(e);
+    map<string, int> unionMap;
+    copy(cluster1.begin(), cluster1.end(), std::inserter(unionMap, unionMap.begin()));  // 깊은 복사
     for(auto e: cluster2)
     {
-        if(union_set.find(e.first) != union_set.end())
+        if(unionMap.find(e.first) != unionMap.end())
         {
-            if(union_set[e.first] < e.second)
-                union_set[e.first] = e.second;
+            if(unionMap[e.first] < e.second)
+                unionMap[e.first] = e.second;
         }
         else
-            union_set[e.first]=e.second;
+            unionMap[e.first]=e.second;
     }
-    map<string, int> intersection_set;
-    for(auto e: cluster1)
-        intersection_set.insert(e);
+    map<string, int> intersectionMap;
+    copy(cluster1.begin(), cluster1.end(), std::inserter(intersectionMap, intersectionMap.begin()));    // 깊은 복사
     for(auto e: cluster2)
     {
-        if(intersection_set.find(e.first) != intersection_set.end())
-        {
-            if(intersection_set[e.first] > e.second)
-                intersection_set[e.first] = e.second;
+        if(intersectionMap.find(e.first) != intersectionMap.end())
+        {   // 교집합이라 더 작은쪽이 들어간다
+            if(intersectionMap[e.first] > e.second)
+                intersectionMap[e.first] = e.second;
         }
     }
-    vector<string> dels;
-    for(auto e: intersection_set)
-    {   // 교집합에는 존재하는게 cluster2에는 존재하지 않으면 삭제
+    vector<string> dels;    //  반복문 돌면서 동시에 삭제는 불가능함 + 이터레이터로 삭제하는 경우도 둘 이상이면 따로 모아서 삭제하면 제대로 작동X
+    for(auto e: intersectionMap)
+    {   // intersectionMap에는 존재하는게 cluster2에는 존재하지 않으면 삭제
         if(cluster2.find(e.first) == cluster2.end())
             dels.push_back(e.first);
     }
     for(auto e: dels)
-        intersection_set.erase(e);
+        intersectionMap.erase(e);
     
     int unionsum = 0;
-    for(auto e: union_set)
+    for(auto e: unionMap)
         unionsum += e.second;
     int intersum = 0;
-    for(auto e: intersection_set)
+    for(auto e: intersectionMap)
         intersum += e.second;
 
-    if(intersum == 0 && unionsum == 0)
+    if(intersum == 0 && unionsum == 0)  //  문제에서: 집합 A와 집합 B가 모두 공집합일 경우에는 나눗셈이 정의되지 않으니 따로 J(A, B) = 1로 정의한다고 함
         answer = 65536;
     else
     {

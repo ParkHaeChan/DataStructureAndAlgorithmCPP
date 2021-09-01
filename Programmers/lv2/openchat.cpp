@@ -45,8 +45,7 @@ vector<string> parse_str(string input)
 vector<string> solution(vector<string> record) {
     vector<string> answer;
     map<string, string> uid_nicknameMap;
-    map<string, int> cmdMap;
-    cmdMap = {{"Enter",1}, {"Leave", 2}, {"Change", 3}};    // cmd 구분용
+    map<string, int> cmdMap = {{"Enter",1}, {"Leave", 2}, {"Change", 3}};    // cmd 구분용 : const 쓰면 아래 switch문에서 cmdMap[cmd]형식으로 사용할 수 없음.
     vector<pair<string, int>> saved;    // answer 출력 저장용: {uid와 Enter/Leave만 저장}
 
     // 1) 입력 종류 별로 처리
