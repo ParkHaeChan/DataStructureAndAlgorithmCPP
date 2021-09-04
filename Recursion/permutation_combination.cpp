@@ -23,6 +23,12 @@ n+r-1 C r = n H r 로 나타낸다.
 container vector의 각 원소를 이 방식으로 접근하여 안의 값을 하나씩 selected에 넣고, 다음 재귀를 수행하도록 구현하면 된다.
 (permutation_container.cpp 참고)
 
+<기본 접근 방식>
+순열, 조합 모두 기본적으로
+이번에 접근할 원소를 "선택 O" 인 경우와 "선택 X"인 경우로 나눠서 재귀적으로 진입하여 구성한다.
+전체에서 몇개를 선택하는지(또는 몇개 이상, 이하인 모든 경우를 선택하는지)
+순서를 어떻게 처리할지, 중복을 허용할지에 따라 나머지 구현이 달라진다.
+
 */
 
 #include <iostream>
@@ -33,16 +39,16 @@ using namespace std;
 int COUNTER = 0;
 
 // 조합: n개(arr.size)중 r개를 (순서 상관 없이) 뽑는다
-// 모든 원소를 이번에 선택할지 말지를 매 재귀함수 실행시 결정한다.
+// 모든 원소에 대해 이번에 선택할지 말지를 매 재귀함수 진입 시 결정한다.
 // 재귀 종료 조건은 depth가 선택지의 끝에 도달한 경우: depth == arr.size 가 된다
-// 선택하는 경우를 먼저 수행할지, 선택하지 않는 경우를 먼저 수행할지는 순회 순서만 바꾼다(문제에 따라 적절하게 적용하자)
+// 선택하는 경우를 먼저 수행할지, 선택하지 않는 경우를 먼저 수행할지는 순회 순서만 바뀐다(문제에 따라 적절하게 적용하자)
 void combination(vector<int>& arr, int r, int depth, vector<int>& selected)
 {   // 중복도 안되고 이전 위치를 다시 가는 것도 막아야한다
     // (예: {2:1}, {3:2}, ... 이 경우는 각각 {1:2}, {2:3}인 경우의 순서만 바꾼 것)
     if(depth == arr.size())
     {
         // selected 크기 확인: 이 조건이 없으면
-        // r개와 상관없이 0에서 arr.size까지 사용하여 구성가능한 모든 경우를 조사한다
+        // r개와 상관없이 처음부터 arr.size까지 사용하여 구성 가능한 모든 경우를 조사한다
         // 그 경우 각 원소를 선택O,X의 두가지 경우의 제곱으로 2^arr.size 가지가 나온다 (아무것도 선택 안하는 경우도 포함)
         if(selected.size() != r)
             return;
@@ -56,10 +62,10 @@ void combination(vector<int>& arr, int r, int depth, vector<int>& selected)
 
     // 이번 depth에서 선택을 하는 경우: selected에 arr[depth]를 추가하여 재귀 진입
     selected.push_back(arr[depth]);
-    combination(arr, r, depth+1, selected);    // 다음 시작위치: (i+1)
+    combination(arr, r, depth+1, selected);    // 다음 시작위치: depth + 1
     selected.pop_back();
 
-    // 이번 depth에서 선택을 안하는 경우: selected를 현재 상태로 재귀 진입
+    // 이번 depth에서 선택을 안하는 경우: selected를 현재 상태 그대로 재귀 진입
     combination(arr, r, depth+1, selected);
 }
 
@@ -86,9 +92,9 @@ void comb_for(vector<int>& arr)
 // 2가지 방식이 가능하다: visitd(used) bool형 vector로 사용 여부를 확인하는 방법 : O(1) 단, arr.size가 크면 메모리 부담
 // 이때 까지 선택한 depth를 set에 저장후 이미 존재하는지 확인하는 방법 : O(log(N)) 선택된 경우만 저장하여 메모리 효율적 (즉, r 값이 작을때 좋다)
 // selected는 실제 방문 순서를 저장하기 위해 사용된다 (used나 set만으로는 추가된 순서를 알 수 없기 때문)
-// used나 set을 쓰지 않을 경우 selected vector를 pair로 depth를 함께 저장하게 만들어 매번 중복확인하여 선택하도록 구현해야한다
+// used나 set을 쓰지 않을 경우 selected vector를 pair로 depth를 함께 저장하게 만들어 매번 중복확인하여 선택하도록 구현해야한다(비효율)
 void permutation(vector<int>& arr, int r, int depth, vector<bool>& used, vector<int>& selected)
-{// 조합과 달리 순서가 다르면 다른 값이 되기 때문에 중복이 아닌 경우 제외하고 앞에 값 사용 할 수 있음
+{   
     if(depth == r)
     {
         for(int e : selected)
@@ -98,6 +104,7 @@ void permutation(vector<int>& arr, int r, int depth, vector<bool>& used, vector<
         return;
     }
     
+    // 조합과 달리 순서가 다르면 다른 값이 되기 때문에 중복이 아닌 경우 제외하고 이전에 사용한 값 다시 시도
     for(int i=0; i<arr.size(); ++i)
     {
         if(used[i]) // 중복 사용 막기
@@ -105,8 +112,7 @@ void permutation(vector<int>& arr, int r, int depth, vector<bool>& used, vector<
         used[i] = true;
         selected.push_back(arr[i]);
         permutation(arr, r, depth+1, used, selected);
-        // 사용 후 원래대로 둔다
-        used[i] = false;
+        used[i] = false;    // 사용 후 원복
         selected.pop_back();
     }
 }
@@ -161,8 +167,8 @@ void perm_with_reputation(vector<int>& arr, int r, int depth, vector<int>& selec
 }
 
 // 중복 조합
-// 조합인데 이전 선택을 연속해서 할 수 있어야 하므로 start가 추가됨
-// 그리고 이때 선택 안하는 경우가 depth를 소모하므로 원래 깊이까지 도달하려면
+// 조합인데 이전 선택을 연속해서 할 수 있어야 하므로 시작위치 정보 인자 start가 추가됨
+// 그리고 이때 추가로 중복 선택하는 만큼 depth가 소모되므로
 // depth == (arr.size + r-1) 이 탈출조건이 되어야 한다는 것 주의!!!!!!!!!!
 void comb_with_reputation(vector<int>& arr, int r, int depth, int start, vector<int>& selected)
 {
@@ -182,7 +188,7 @@ void comb_with_reputation(vector<int>& arr, int r, int depth, int start, vector<
     selected.push_back(arr[start]);
     comb_with_reputation(arr, r, depth+1, start, selected);
     selected.pop_back();
-    // 이번꺼 선택 안하는 경우 (depth가 소모되고 위의 start로 재진입)
+    // 이번꺼 선택 안하는 경우 (depth가 소모되면서 위에서 start+1로 재진입하게됨)
     comb_with_reputation(arr, r, depth+1, start+1, selected);
 }
 
