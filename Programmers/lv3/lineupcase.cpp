@@ -49,6 +49,7 @@ void fast_permutation(vector<int>& arr, int depth, long long k, vector<int>& sel
         if(k > factorial)   // 시도 3: k == factorial의 경우는 다음 재귀에서 찾도록 놔둠
         {   // k에서 fact만큼 줄이고 다음 start로 재시도
             k -= factorial;
+            // 시도 3에서 삭제: if(k > 0)   // 시도 2: 0인 경우는 이번 start를 선택해야 함
             continue;
         }
 
