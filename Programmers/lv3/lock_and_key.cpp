@@ -51,6 +51,8 @@ lock과 키를 합치는 2차원 배열을 만들어 보기로 했다.
 그걸 key가 다시 받는 경우는 제대로 작동했으나, (key = rotate_90(key);)
 반복문 밖에서 vector<vector<int>> temp_key; 를 선언한 뒤
 반복문 내에서 temp_key = rotate_90(key); 이런 식으로 받으면 문제가 생겼다.
+원인은 어이없게도
+이전 회전 상태를 유지하면서 돌려야지 초기 상태를 유지하면서 대입으로 회전 적용해서 그런 것...<실수>
 
 */
 #include <iostream>
@@ -124,7 +126,7 @@ bool solution(vector<vector<int>> key, vector<vector<int>> lock) {
                     return true;
             }
         }
-        // 키 갱신(다음 회전 위해)
+        // 키 갱신(다음 회전에 이어서 돌려야 하므로)
         key = temp_key;
     }
     return false;
