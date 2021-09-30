@@ -36,7 +36,9 @@ banned_id 배열 각 원소들의 값은 길이가 1 이상 8 이하인 문자�
 아직 시간초과 발생
 
 시도3)
-
+멀티맵으로 구현하였기 때문에
+banned_id가 ****** 처럼 들어오면 같은 키-값을 중복해서 가져온다.
+recur 내부에서 vector로 받지 말고 set으로 받아 중복값을 제거
 */
 
 #include <string>
@@ -61,19 +63,20 @@ void recur(int depth, set<string>& strSet)
         return;
     }
     auto it_pair = idMap.equal_range(banVect[depth]);
-    vector<string> candidateVect;
+    //  시도3
+    set<string> candidateSet;
     for(auto it=it_pair.first; it != it_pair.second; ++it)
     {
-        candidateVect.push_back(it->second);
+        candidateSet.insert(it->second);
     }
-    for(int i=0; i<candidateVect.size(); ++i)
+    for(auto& e: candidateSet)
     {
         // 시도2: set에 중복있으면 넘기도록 구현
-        if(strSet.find(candidateVect[i]) != strSet.end())
+        if(strSet.find(e) != strSet.end())
             continue;
-        strSet.insert(candidateVect[i]);
+        strSet.insert(e);
         recur(depth+1, strSet);
-        strSet.erase(candidateVect[i]);
+        strSet.erase(e);
     }
 }
 
