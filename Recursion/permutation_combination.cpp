@@ -170,9 +170,10 @@ void perm_with_reputation(vector<int>& arr, int r, int depth, vector<int>& selec
 // 조합인데 이전 선택을 연속해서 할 수 있어야 하므로 시작위치 정보 인자 start가 추가됨
 // 그리고 이때 추가로 중복 선택하는 만큼 depth가 소모되므로
 // depth == (arr.size + r-1) 이 탈출조건이 되어야 한다는 것 주의!!!!!!!!!!
+// 좀 더 명확히 설명하면 n H r 을 조합으로 보면 n+r-1 C r 이므로 n+r-1 번 선택 여부를 결정해야 하기 때문이다.
 void comb_with_reputation(vector<int>& arr, int r, int depth, int start, vector<int>& selected)
 {
-    if(depth == arr.size()+(r-1))   // 탈출 조건 다른 것 주의(추가로 중복 가능한 만큼 depth가 소모된다)
+    if(depth == arr.size()+(r-1))   // 탈출 조건 다른 것 주의( n+r-1 번 선택해야 함)
     {
         if(selected.size() != r)    // selected는 r개인 경우만 고려
             return;
