@@ -148,7 +148,11 @@ if(!visited[next.first][next.second])
     visited[next.first][next.second] = true;
     bfsQ.push({next, cur.n+1});
 }
-식으로 고쳐주니 통과되었다...둘이 차이가 있나보다. 주의해야 겠다.
+식으로 고쳐주니 통과되었다...
+
+1칸 이동한 경우가 이미 방문했다고 다른 방향으로 가는 경우로 넘겨버리면(continue)
+ctrl+이동으로 이동한 경우를 처리하지 않고 넘어가 버려서 발생한 문제이다.
+주의해야 겠다.
 
 */
 #include <iostream>
