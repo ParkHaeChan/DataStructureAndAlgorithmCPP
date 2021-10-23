@@ -1,0 +1,7 @@
+6
+branch
+branch
+branch
+branch
+branch
+merge 2
