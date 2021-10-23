@@ -11,10 +11,12 @@ edges의 각 행은 [부모 노드 번호, 자식 노드 번호] 형태로, 서�
 
 부분점수
 ----시험 후----
+시도2
 이진 트리인 점을 생각하면 트리의 후위 순회방식을 응용하면
 좌우 자식 노드를 방문한 다음 원래 위치로 돌아오는 것을 구현할 수 있다.
 다른 쪽에서 양을 찾으면 이전에 못가던 늑대쪽을 다시 시도해 봐야 하므로
 후위순회를 2회 시켜주는 방식으로 구현하면 어떨지 생각이 든다.
+ramb 수는 전역변수로 관리하고 wolf수는 재귀함수 인자로 사용하도록 변경
 */
 
 #include <string>
@@ -32,6 +34,7 @@ using namespace std;
 vector<bool> visited;
 int ramb = 1;
 int wolfcnt = 0;
+/* 시도1
 int DFS(vector<vector<node>>& Graph, int start)
 {
     for(auto& e: Graph[start])
@@ -59,6 +62,49 @@ int DFS(vector<vector<node>>& Graph, int start)
     }
 
     return ramb;
+}*/
+// 시도2
+int DFS(vector<vector<node>>& Graph, int start, int wolves)
+{
+    for(auto& e: Graph[start])
+    {
+        if(e.wolf)
+        {
+            if(ramb <= wolves+1)
+                continue;
+            else
+                DFS(Graph, e.id, wolves+1);
+        }
+        else
+        {
+            if(!e.visited)
+            {
+                ramb++;
+                e.visited = true;
+            }
+            DFS(Graph, e.id, wolves);
+        }
+    }
+    for(auto& e: Graph[start])
+    {
+        if(e.wolf)
+        {
+            if(ramb <= wolves+1)
+                continue;
+            else
+                DFS(Graph, e.id, wolves+1);
+        }
+        else
+        {
+            if(!e.visited)
+            {
+                ramb++;
+                e.visited = true;
+            }
+            DFS(Graph, e.id, wolves);
+        }
+    }
+    return ramb;
 }
 
 int solution(vector<int> info, vector<vector<int>> edges) {
@@ -71,7 +117,7 @@ int solution(vector<int> info, vector<vector<int>> edges) {
         //Graph[e[1]].push_back({e[0], (bool)info[e[0]]});
     }
     visited = vector<bool>(N, false);
-    answer = DFS(Graph, 0);
+    answer = DFS(Graph, 0, 0);
 
     return answer;
 }
